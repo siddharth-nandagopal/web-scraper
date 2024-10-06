@@ -2,14 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 
 def extract_links(elements, base_url, max_results=100):
-    links = []
+    links = set()
     for e in elements:
         url = e["href"]
         if "https://" not in url:
             url = base_url + url
         if base_url in url:
-            links.append(url)
-    return set(links[:max_results])
+            links.add(url)
+        if len(links) >= max_results:
+            break
+    return links
 
 
 def find_links(start_url, base_url, depth=2):
